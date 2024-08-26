@@ -12,3 +12,4 @@ class Job extends Model {
       'title',
       'salary',
    ];
+}
