@@ -6,6 +6,8 @@ use App\Models\Job;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\JobPosted;
 
 class JobController extends Controller
 {
@@ -30,12 +32,16 @@ class JobController extends Controller
             'title' => ['required', 'min:3'],
             'salary' => ['required']
         ]);
-        Job::create([
+        $job = Job::create([
             'title' => request('title'),
             'salary' => request('salary'),
             'employer_id' => 1
             //'employer_id'=>rand(1, 10)
         ]);
+
+       Mail::to($job->employer->user)->send( 
+            new JobPosted($job)
+            );
     
         return redirect('/jobs');
     }
